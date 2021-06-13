@@ -4,8 +4,8 @@ za pojedinačne igre sa sveukupnom ocjenom te kratkim natuknicama. No također m
 glavni urednik koji će pisati najnovije vijesti i recenzije to možete napraviti (u PHPMyAdmin-u u tablici korisnik gdje treba promijeniti razinu iz 0 u 1 za pojedinog korisnika).
 Nakon što ste postali glavni urednik možete kreirate nove članke i promijeniti starije članke.
 
-Stranica je testirana i funkcionira u sljedećim browserima:
-      - Microsoft Edge
-      - Google Chrome
-      - Opera Browser
-      - FireFox
+Stranica je testirana u sljedećim browserima:      
+  - Microsoft Edge
+  - Google Chrome
+  - Opera Browser
+  - FireFox
