@@ -28,6 +28,7 @@
 <body>
     <?php
     include "connect.php";
+    session_start();
     ?>
     <header>
         <div class="website-title">
@@ -42,6 +43,9 @@
                 if (!isset($_SESSION['$username'])) {
                     print '<li><a id="main-active" href="registracija.php">SIGN UP</a></li>
                     <li class="temporarily-active3" onmouseover="highligh()" onmouseout="outhiglight()"><a href="administracija.php">ADMINISTRATION</a></li>';
+                } else {
+                    header("Location:administracija.php");
+                    exit;
                 }
                 ?>
             </ul>
@@ -65,7 +69,6 @@
     <?php
     $RegisterUser = false;
     $userExist = false;
-    session_start();
     if (isset($_POST['Register'])) {
         $name = $_POST["name"];
         $surname = $_POST["surname"];
