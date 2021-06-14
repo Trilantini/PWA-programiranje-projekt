@@ -171,7 +171,7 @@
       <div class="col-md-7">
         <label for="Summary" class="form-label">Write a short summary (<span>avoid using single quotes</span>)</label>
         <span id="msgShort" class="msgShort msgColor"></span>
-        <textarea name="Abstract" rows="4" maxlength="320" class="form-control" id="Summary" pattern="[^':]*$" placeholder="TitleExample..."></textarea>
+        <textarea name="Abstract" rows="4" maxlength="320" pattern="[^':]*$" class="form-control" id="Summary" placeholder="TitleExample..."></textarea>
       </div>
 
       <div class="col-md-5"></div>
@@ -180,7 +180,7 @@
       <div class="col-md-12">
         <label for="Content" class="form-label">Write an article (<span>avoid using single quotes</span>) </label>
         <span id="msgLong" class="msgLong msgColor"></span>
-        <textarea name="Article" rows="10" class="form-control" id="Content" pattern="[^':]*$" placeholder="Start writing text..."></textarea>
+        <textarea name="Article" rows="10" class="form-control" pattern="[^':]*$" id="Content" placeholder="Start writing text..."></textarea>
       </div>
 
       <div id="check-review" class="row">
@@ -197,15 +197,15 @@
             <legend>Strengths:</legend>
             <span id="msgPositive" class="msgPositive msgColor"></span>
             <div class="form-floating">
-              <input type="text" class="form-control" name="Pros1" maxlength="50" id="good1" placeholder="example" />
+              <input type="text" class="form-control" name="Pros1" maxlength="50" id="good1" pattern="[^':]*$" placeholder="example" />
               <label for="good1" class="form-label" id="labelpro1">Pros 1:</label>
             </div>
             <div class="form-floating">
-              <input type="text" class="form-control" name="Pros2" maxlength="50" id="good2" placeholder="example" />
+              <input type="text" class="form-control" name="Pros2" maxlength="50" id="good2" pattern="[^':]*$" placeholder="example" />
               <label for="good2" class="form-label" id="labelpro2">Pros 2:</label>
             </div>
             <div class="form-floating">
-              <input type="text" class="form-control" name="Pros3" maxlength="50" id="good3" placeholder="example" />
+              <input type="text" class="form-control" name="Pros3" maxlength="50" id="good3" pattern="[^':]*$" placeholder="example" />
               <label for="good3" class="form-label" id="labelpro3">Pros 3:</label>
             </div>
           </fieldset>
@@ -216,15 +216,15 @@
             <legend>Weaknesses:</legend>
             <span id="msgNegative" class="msgNegative msgColor"></span>
             <div class="form-floating">
-              <input type="text" class="form-control" name="Cons1" maxlength="50" id="bad1" placeholder="example" />
+              <input type="text" class="form-control" name="Cons1" maxlength="50" id="bad1" pattern="[^':]*$" placeholder="example" />
               <label for="bad1" class="form-label" id="labelneg1">Cons 1:</label>
             </div>
             <div class="form-floating">
-              <input type="text" class="form-control" name="Cons2" maxlength="50" id="bad2" placeholder="example" />
+              <input type="text" class="form-control" name="Cons2" maxlength="50" id="bad2" pattern="[^':]*$" placeholder="example" />
               <label for="bad2" class="form-label" class="form-label" id="labelneg2">Cons 2:</label>
             </div>
             <div class="form-floating">
-              <input type="text" class="form-control" name="Cons3" maxlength="50" id="bad3" placeholder="example" />
+              <input type="text" class="form-control" name="Cons3" maxlength="50" id="bad3" pattern="[^':]*$" placeholder="example" />
               <label for="bad3" class="form-label" id="labelneg3">Cons 3:</label>
             </div>
           </fieldset>
@@ -409,6 +409,7 @@
           /* Check short summary */
           var InputSummary = document.getElementById("Summary");
           var summary = document.getElementById("Summary").value;
+
           if (summary.length < 10 || summary.length > 236) {
             var SendForm = false;
             InputSummary.style.border = "2px dashed #fcd303";
@@ -419,6 +420,7 @@
             InputSummary.style.color = "green";
             document.getElementById("msgShort").innerHTML = "";
           }
+
 
           /* Check the main content */
           var InputContent = document.getElementById("Content");
@@ -433,6 +435,7 @@
             InputContent.style.color = "green";
             document.getElementById("msgLong").innerHTML = "";
           }
+
 
           /* Check the picture */
           var InputPhoto = document.getElementById("Pictures");
@@ -493,6 +496,36 @@
             document.getElementById("msgQuote").innerHTML = "";
           }
         });
+
+        $('textarea').keyup(validateTextarea);
+
+        function validateTextarea() {
+          var errorMsg = "Please remove quotes";
+          var textarea = this;
+          var pattern = new RegExp('^' + $(textarea).attr('pattern') + '$');
+          // check each line of text
+          $.each($(this).val().split("\n"), function() {
+            // check if the line matches the pattern
+            var hasError = !this.match(pattern);
+            if (typeof textarea.setCustomValidity === 'function') {
+              textarea.setCustomValidity(hasError ? errorMsg : '');
+            } else {
+              // Not supported by the browser, fallback to manual error display...
+              $(textarea).toggleClass('error', !!hasError);
+              $(textarea).toggleClass('ok', !hasError);
+
+              if (hasError) {
+                $(textarea).attr('title', errorMsg);
+                textarea.style.setProperty("border", "2px dashed #fcd303", "important");
+                textarea.style.setProperty("color", "#fcd303", "important");
+              } else {
+                $(textarea).removeAttr('title');
+
+              }
+            }
+            return !hasError;
+          });
+        }
       </script>
 
       <script type="text/javascript">
