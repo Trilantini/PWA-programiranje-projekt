@@ -244,15 +244,15 @@
                         <legend>Strengths:</legend>
                         <span id="msgPositive_' . $row['id'] . '" class="msgPositive msgColor"></span>
                         <div class="form-floating">
-                        <input type="text" class="form-control" value="' . $row['pozitivno1'] . '" name="Pros1" maxlength="50" id="good1_' . $row['id'] . '" placeholder="example" />
+                        <input type="text" class="form-control" value="' . $row['pozitivno1'] . '" name="Pros1" maxlength="50" id="good1_' . $row['id'] . '" pattern="[^\':]*$" placeholder="example" />
                         <label for="good1_' . $row['id'] . '" class="form-label" id="labelpro1_' . $row['id'] . '">Pros 1:</label>
                         </div>
                         <div class="form-floating">
-                        <input type="text" class="form-control" name="Pros2" value="' . $row['pozitivno2'] . '" maxlength="50" id="good2_' . $row['id'] . '" placeholder="example" />
+                        <input type="text" class="form-control" name="Pros2" value="' . $row['pozitivno2'] . '" maxlength="50" id="good2_' . $row['id'] . '" pattern="[^\':]*$" placeholder="example" />
                         <label for="good2_' . $row['id'] . '" class="form-label" id="labelpro2_' . $row['id'] . '">Pros 2:</label>
                         </div>
                         <div class="form-floating">
-                        <input type="text" class="form-control" name="Pros3" value="' . $row['pozitivno3'] . '" maxlength="50" id="good3_' . $row['id'] . '" placeholder="example" />
+                        <input type="text" class="form-control" name="Pros3" value="' . $row['pozitivno3'] . '" maxlength="50" id="good3_' . $row['id'] . '" pattern="[^\':]*$" placeholder="example" />
                         <label for="good3_' . $row['id'] . '" class="form-label" id="labelpro3_' . $row['id'] . '">Pros 3:</label>
                         </div>
                     </fieldset>
@@ -263,15 +263,15 @@
                         <legend>Weaknesses:</legend>
                         <span id="msgNegative_' . $row['id'] . '" class="msgNegative msgColor"></span>
                         <div class="form-floating">
-                        <input type="text" class="form-control" name="Cons1" value="' . $row['negativno1'] . '" maxlength="50" id="bad1_' . $row['id'] . '" placeholder="example" />
+                        <input type="text" class="form-control" name="Cons1" value="' . $row['negativno1'] . '" maxlength="50" id="bad1_' . $row['id'] . '" pattern="[^\':]*$" placeholder="example" />
                         <label for="bad1_' . $row['id'] . '" class="form-label" id="labelneg1_' . $row['id'] . '">Cons 1:</label>
                         </div>
                         <div class="form-floating">
-                        <input type="text" class="form-control" name="Cons2" maxlength="50" value="' . $row['negativno2'] . '" id="bad2_' . $row['id'] . '" placeholder="example" />
+                        <input type="text" class="form-control" name="Cons2" maxlength="50" value="' . $row['negativno2'] . '" id="bad2_' . $row['id'] . '" pattern="[^\':]*$" placeholder="example" />
                         <label for="bad2_' . $row['id'] . '" class="form-label" class="form-label" id="labelneg2_' . $row['id'] . '">Cons 2:</label>
                         </div>
                         <div class="form-floating">
-                        <input type="text" class="form-control" name="Cons3" maxlength="50" value="' . $row['negativno3'] . '" id="bad3_' . $row['id'] . '" placeholder="example" />
+                        <input type="text" class="form-control" name="Cons3" maxlength="50" value="' . $row['negativno3'] . '" id="bad3_' . $row['id'] . '" pattern="[^\':]*$" placeholder="example" />
                         <label for="bad3_' . $row['id'] . '" class="form-label" id="labelneg3_' . $row['id'] . '">Cons 3:</label>
                         </div>
                     </fieldset>
@@ -544,7 +544,7 @@
           }
       </script>';
       print '<script> 
-      $("#forma_' . $row['id'] . ' input[type=text], textarea").keyup(function() {
+      $("#forma_' . $row['id'] . ' input[type=text],#forma_' . $row['id'] . ' textarea").keyup(function() {
         var check = $(this).val();
         var checkID = this.id;
         if (check.includes("\'")) {
@@ -581,6 +581,38 @@
           document.getElementById("msgQuote_' . $row['id'] . '").innerHTML = "";
         }
       });
+
+
+      $("#forma_' . $row['id'] . ' textarea").keyup(validateTextarea);
+
+        function validateTextarea() {
+          var errorMsg = "Please match the format requested";
+          var textarea = this;
+          var pattern = new RegExp("^" + $(textarea).attr("pattern") + "$");
+          // check each line of text
+          $.each($(this).val().split("\n"), function() {
+            // check if the line matches the pattern
+            var hasError = !this.match(pattern);
+            if (typeof textarea.setCustomValidity === "function") {
+              textarea.setCustomValidity(hasError ? errorMsg : "");
+            } else {
+              // Not supported by the browser, fallback to manual error display...
+              $(textarea).toggleClass("error", !!hasError);
+              $(textarea).toggleClass("ok", !hasError);
+
+              if (hasError) {
+                $(textarea).attr("title", errorMsg);
+                textarea.style.setProperty("border", "2px dashed #fcd303", "important");
+                textarea.style.setProperty("color", "#fcd303", "important");
+              } else {
+                $(textarea).removeAttr("title");
+
+              }
+            }
+            return !hasError;
+          });
+        }
+
     </script>';
       print '</form>
     <br><br>
