@@ -500,7 +500,7 @@
         $('textarea').keyup(validateTextarea);
 
         function validateTextarea() {
-          var errorMsg = "Please remove quotes";
+          var errorMsg = "Please match the format requested";
           var textarea = this;
           var pattern = new RegExp('^' + $(textarea).attr('pattern') + '$');
           // check each line of text
